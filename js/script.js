@@ -141,7 +141,7 @@ function stopDrag(){
                 p.parentNode.removeChild(p); //reemplaza o eliminar el popup anterior dentro de "map"
             }
         }else{
-            targ.style.left = originalX; //las posiciones no fueron calculadas, por lo tanro se reestablecen a las originales
+            targ.style.left = originalX; //las posiciones no fueron calculadas, por lo tanto se reestablecen a las originales
             targ.style.top = originalY;
         }
     }
