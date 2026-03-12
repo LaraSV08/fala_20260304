@@ -1,94 +1,95 @@
-//POSICIONES DE LAS IMAGENES
+// posiciones de las imagenes
 let maxLeft;
 let maxTop;
-const minLeft=0;
-const minTop=0;
+const minLeft= 0;
+const minTop = 0;
 let timeDelta;
-//RUTA DE LAS IMAGENES
+//ruta de las imagenes
 let imgs = [
     "media/img/arboles/arbol1.png",
     "media/img/arboles/arbol2.png",
     "media/img/arboles/arbol3.png",
     "media/img/arboles/arbol4.png",
-];
-//COORDENADAS DE LA POSICION DE LAS IMAGENES
+]
+//coordenadas de la posicion de las imagenes
 var originalX;
 var originalY;
 
-window.onload= function(){
+window.onload = function(){
     document.onmousedown = startDrag;
     document.onmouseup = stopDrag;
 }
 
-function sensorClick(){
-    if(Date.now() - timeDelta < 150){ //verifica que no hemos arrastrado
-       createPopup(); 
-    }
-}
 
-//La función "createpopup()" se ejecuta cuando el usuario ejecuta un evento (ejemplo "click")
+function sensorClick(){
+    if(Date.now() - timeDelta < 150){ //verifica que no hemos arrastrado ningún objeto
+        createPopup();
+        }
+
+    } 
+
+    //la función "createpopup()"¨se ejecuta cuando el usuario ejecuta un evento (ejemplo "click")
 function createPopup(parent){
-    let p = document.getElementById("popup");
+    let p = document.getElementById("popup"); 
     if(p){
         p.parentNode.removeChild(p);
     }
 
-    //SE CREA UN ELEMENTO EN EJECUCIÓN DE JAVASCRIPT
-    let popup = document.createElement("div"); //elemento a crear "<div></div>"
-    popup.id = "popup"; // id="popup"
+    //se crea un elemento en ejecución de javascript
+
+    let popup = document.createElement("div");//elemento crear "<div></div>"
+    popup.id = "popup"; //id="popup"
     popup.className = "popup"; //class="popup"
-    popup.style.top = parent.y - 110 + "px"; // top = Y - 110px
-    popup.style.left = parent.x - 75 + "px"; // left = X - 75px
+    popup.style.top = parent.y - 110 + "px";
+    popup.style.left = parent.x - 75 + "px";
 
-    //SE CREA UN ELEMENTO EN EJECUCIÓN DE JAVASCRIPT
-    let text = document.createElement("span"); // elemento a crear "<span></span>"
+    //se crea un elemento en ejecución de javascript
+    let text = document.createElement("span");//elemento crear "<span></span>"
     text.textContent = parent.id; //contenido del span=id del popup o id del div que contiene al <span>
-    popup.appendChild(text); //se ancla el span al div que fue creado en las líneas anteriores
+    popup.appendChild(text); // se ancla el objeto con class="map" al <div> popup
 
-    //SE CREA UN ELEMENTO EN EJECUCIÓN DE JAVASCRIPT
-    var map = document.getElementsByClassName("map"); //Se obtienen las propiedades del div que posee el cl
-    map.appendChild(popup); // se ancla el objeto con class="map" al <div> popup
+    //se crea un elemento en ejecución de javascript
+    var map = document.getElementsByClassName("map");
+    map.appendChild(popup);
 }
 
-//LA FUNCIÓN "baseOnLoad" se ejecuta al cargar el HTML
+//la función "baseOnLoad" se ejecuta al cargar el HTML
 function baseOnLoad(){
-    var map = document.getElementsByClassName("map")[0]; //se obtiene el elemento "map" del html
-    let base = document.getElementsByClassName("base")[0];// se obtiene el elemento "base" del html
-    maxLeft = base.width = -50; //se establece un espacio máximo para la posición de la izquierda
-    maxTop = base.top - 50; //se establece un espacio máximo para la posición del top
+    var map = document.getElementsByClassName("map")[0];
+    let base = document.getElementsByClassName("base")[0];
 
-    //para cada imagen en el arreglo (menor que 6)
+    maxLeft = base.offsetWidth - 50;
+    maxTop = base.offsetHeight - 50;
+
     for(let i = 0; i < 6; i++){
-        //CREA UN NUEVO ELEMENTO EN EJECUCIÓN DE JAVASCRIPT
-        let sensor = document.createElement("img"); //el elemento es un <img>
-        sensor.src = imgs[i% imgs.length]; //la url de la última posición del array img[] que fue establecido en
-        sensor.alt = i; //el texto alterno en caso que la url sea inválida
-        sensor.id = i;// el id del elemento <img id=id>
-        sensor.draggable = true; //propiedad draggable activada
-        sensor.classList.add("sensor"); //se agrega a un arreglo de eventos o elementos
-        sensor.classList.add("draggme"); //se agrega a un arreglo de eventos o elementos
-        sensor.style.left = `${Math.floor(Math.random() * 900)}px`; //se establece un valor entre 0 y 900px
-        sensor.style.top = `${Math.floor(Math.random() * 500)}px`; //se establece un valor entre 0 y 500px
-        sensor.onclick = sensorClick; //se ejecuta el evento "click"
+        let sensor = document.createElement("img");
+        sensor.src = imgs[i % imgs.length];
+        sensor.alt = i;
+        sensor.id = i;
+        sensor.draggable = true;
+        sensor.classList.add("sensor");
+        sensor.classList.add("dragme");
 
-        let parent = document.getElementsByClassName("map")[0]; //se heredan los atributos del div "map"
-        parent.appendChild(sensor); //se ancla el elemento "sensor" (<img>) al elemento "map"
+        sensor.style.left = `${Math.floor(Math.random()*900)}px`;
+        sensor.style.top = `${Math.floor(Math.random()*500)}px`;
+
+        sensor.onclick = sensorClick;
+
+        let parent = document.getElementsByClassName("map")[0];
+        parent.appendChild(sensor); 
     }
-
 }
 
-function startDrag(){
+function startDrag(e){
     timeDelta = Date.now(); //obtiene la fecha y hora actual
     if(!e){ //si no hay evento
         var e = window.event; //se crea un evento heredado
     }
-
-    if(e.preventDefault){ //si se ha detenido la ejecución
-        e.preventDefault(); //que siga detenido porque probablemente se esté en el evento drag
+    if(e.preventDefault){
+        e.preventDefault();
     }
-
-    targ = e.target ? e.target : e.srcElement;
-    originalX = targ.style.left;
+    targ = e.target ? e.target : e.srcElement; //se obtiene la ultima posicion
+    originalX = targ.style.left; // se establace la posicion x original para ser modificada en el proceso de arrastrado
     originalY = targ.style.top;
 
     if(!targ.classList.contains("dragme")){
@@ -98,7 +99,6 @@ function startDrag(){
     offsetX = e.clientX;
     offsetY = e.clientY;
 
-    //se obtiene el valor entero de las posiciones left y top
     coordX = parseInt(targ.style.left);
     coordY = parseInt(targ.style.top);
     drag = true;
@@ -108,45 +108,42 @@ function startDrag(){
 }
 
 function dragDiv(e){
-    if(!drag){ //si no ha sido movido por cualquier razón
-        return; //se finaliza la ejecución
+    if (!drag){ //si no ha movido por cualquier razón
+        return; // si se finaliza la ejecución
     }
-    if(!e){
-        e = window.event;
+    if (!e){ // si no existe ningun evento
+        e = window.event; // se agrega un evento
     }
 
-    //verificar los bordes al mover el elemento seleccionado
-    let newLeft = coordX + e.clientX - offsetX; //se calcula una nueva ubicación la posición
+    // verificar los bordes al mover el elemento seleccionado
+    let newLeft = coordX + e.clientX - offsetX;
     if(newLeft < maxLeft && newLeft>minLeft){
-        targ.style.left = newLeft+'px'; //se cambia a la nueva ubicación que fue calculada antes
+        targ.style.left = newLeft+'px';
     }
 
     let newTop = coordY + e.clientY - offsetY;
     if(newTop <maxTop && newTop > minTop){
-        targ.style.top = newTop+'px';
+        targ.style.top = newTop +'px';
     }
 
     return false;
-
 }
 
 function stopDrag(){
     if(typeof drag == "undefined"){ //si se desconoce que existe un evento de tipo "draggable"
         return; //se finaliza la ejecución del evento previo
-
     }
 
     if(drag){ //si se está moviendo
-        if(Date.now() - timeDelta > 150){ //se verifica que de verdad se movió a partir del valor del tiempo obtenido
-            let p = document.getElementById("popup"); //se heredan todos los elementos del div <div id="popup"> que fueron
-            if(p){ //si hay un poup seleccionado
-                p.parentNode.removeChild(p); //reemplaza o elimina el popup anterior dentro de "map"
+        if(Date.now() - timeDelta > 150){ // se verifica que de verdad se movió a partir del valor del tiempo obtenido
+            let p = document.getElementById("popup"); // se heredan todos los elementos del div <div id ="popup"> 
+            if (p){ //si hay un popup seleccionado
+                p.parentNode.removeChild(p); //reemplaza o eliminar el popup anterior dentro de "map"
             }
         }else{
-            targ.style.left = originalX; //las posiciones no fueron calculadas, por lo tanto de restablecen a las
-            targ.style.top = originalY; //las posiciones no fueron calculadas, por lo tanto se restablecen a las posiciones
+            targ.style.left = originalX; //las posiciones no fueron calculadas, por lo tanro se reestablecen a las originales
+            targ.style.top = originalY;
         }
-
     }
 
     drag = false; //deja de moverse
